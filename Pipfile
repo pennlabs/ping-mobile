@@ -1,0 +1,14 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[requires]
+python_version = "3"
+
+[packages]
+cryptography = ">=44.0.0"
+fastapi = ">=0.115.8"
+pyjwt = ">=2.10.1"
+requests = ">=2.32.3"
+uvicorn = ">=0.34.0"
