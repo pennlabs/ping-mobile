@@ -27,7 +27,7 @@ export class MyChart extends PennLabsChart {
       ingress: {
         rules: [{
           host: "pennmobile.org",
-          paths: ["/notifications"],
+          paths: ["/api/notifications"],
         }],
         ...ingressProps,
       }
