@@ -28,7 +28,6 @@ export class MyChart extends PennLabsChart {
         rules: [{
           host: "pennmobile.org",
           paths: ["/notifications"],
-          isSubdomain: true,
         }],
         ...ingressProps,
       }
