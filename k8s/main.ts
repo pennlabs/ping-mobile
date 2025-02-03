@@ -7,7 +7,7 @@ export class MyChart extends PennLabsChart {
   constructor(scope: Construct) {
     super(scope);
 
-    const backendImage = 'pennlabs/penn-mobile-notification-backend';
+    const backendImage = 'pennlabs/ping-mobile-backend';
     const secret = "penn-mobile";
 
     const ingressProps = {
@@ -26,8 +26,9 @@ export class MyChart extends PennLabsChart {
       },
       ingress: {
         rules: [{
-          host: "pennmobile.org",
-          paths: ["/api/notifications"],
+          host: "notifications.pennmobile.org",
+          isSubdomain: true,
+          paths: ["/api"],
         }],
         ...ingressProps,
       }

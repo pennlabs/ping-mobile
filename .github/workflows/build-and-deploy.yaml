@@ -22,7 +22,7 @@ jobs:
     uses: pennlabs/shared-actions/.github/workflows/docker-publish.yaml@v0.1
     with:
       # Inputs
-      imageName: "notification-backend"
+      imageName: "ping-mobile-backend"
       githubRef: ${{ github.ref }}
       gitSha: ${{ github.sha }}
 
