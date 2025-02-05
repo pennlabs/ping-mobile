@@ -37,7 +37,11 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Security(security))
     except jwt.InvalidTokenError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
-@app.post("/notifications/generate_token/{pennkey}")
+@app.get("/api/notifications/ping")
+def ping():
+    return {"status": "ok"}
+
+@app.post("/api/notifications/generate_token/{pennkey}")
 def generate_token(pennkey: str):
     if pennkey not in ALLOWED_USERS:
         raise HTTPException(status_code=403, detail="User not authorized")
@@ -48,7 +52,7 @@ def generate_token(pennkey: str):
     token = jwt.encode(payload, PINGMOBILE_SECRET, algorithm="HS256")
     return {"token": token}
 
-@app.post("/notifications/send_notification")
+@app.post("/api/notifications/send_notification")
 def send_notification(req: NotificationRequest, token_payload: dict = Depends(verify_token)):
     private_key = PINGMOBILE_PEM
 
