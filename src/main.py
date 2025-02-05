@@ -18,9 +18,9 @@ PINGMOBILE_PEM = os.getenv("PINGMOBILE_PEM")
 if not PINGMOBILE_PEM:
     raise ValueError("PINGMOBILE_PEM environment variable is not set")
 
-ALLOWED_USERS = os.getenv("ALLOWED_USERS", "").split(",")
+ALLOWED_USERS = os.getenv("PINGMOBILE_ALLOWED_USERS", "").split(",")
 if not ALLOWED_USERS:
-    raise ValueError("ALLOWED_USERS environment variable is not set")
+    raise ValueError("PINGMOBILE_ALLOWED_USERS environment variable is not set")
 
 class NotificationRequest(BaseModel):
     recipients: List[str]
