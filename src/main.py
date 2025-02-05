@@ -18,8 +18,9 @@ PINGMOBILE_PEM = os.getenv("PINGMOBILE_PEM")
 if not PINGMOBILE_PEM:
     raise ValueError("PINGMOBILE_PEM environment variable is not set")
 
-ALLOWED_USERS = {"joyliu", "antli", "vcai", "jhawkman", "melitski"}
-
+ALLOWED_USERS = os.getenv("ALLOWED_USERS", "").split(",")
+if not ALLOWED_USERS:
+    raise ValueError("ALLOWED_USERS environment variable is not set")
 
 class NotificationRequest(BaseModel):
     recipients: List[str]
@@ -41,7 +42,6 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Security(security))
 def ping():
     return {"status": "ok"}
 
-@app.post("/api/notifications/generate_token/{pennkey}")
 def generate_token(pennkey: str):
     if pennkey not in ALLOWED_USERS:
         raise HTTPException(status_code=403, detail="User not authorized")
@@ -54,6 +54,7 @@ def generate_token(pennkey: str):
 
 @app.post("/api/notifications/send_notification")
 def send_notification(req: NotificationRequest, token_payload: dict = Depends(verify_token)):
+    body = f"[From {token_payload['pennkey']}]\n {req.body}"
     private_key = PINGMOBILE_PEM
 
     now = int(time.time())
@@ -64,15 +65,13 @@ def send_notification(req: NotificationRequest, token_payload: dict = Depends(ve
     }
 
     token = jwt.encode(payload, private_key, algorithm="RS256")
-    print("Generated Token:", token)
-
     endpoint = "https://pennmobile.org/api/user/notifications/alerts/"
     headers = {"Content-Type": "application/json", "Authorization": f"Bearer {token}"}
     data = {
         "users": req.recipients,
         "service": "COURSES",
         "title": req.title,
-        "body": req.body,
+        "body": body,
     }
 
     response = requests.post(endpoint, headers=headers, json=data)
